@@ -72,4 +72,4 @@ def main(inputFileName):
         print("[Info] File downloading is complete!")
 
 if __name__ == "__main__":
-    main(INPUT_FILES_FOLDER + INPUT_FILE)
+    main(INPUT_FILES_FOLDER + DOWNLOAD_INDEX)
