@@ -28,8 +28,6 @@ def getInterval (fileName):
     finalResult = []
 
     for result in partialResult:
-        print("File: {} | Result: {}".format(fileName, result[2]))
-
         # This also treats the case where '..' is missing in peptide interval
         begin, end = result[2].split("..") if ".." in result[2] else (result[2], result[2])
 
@@ -67,14 +65,14 @@ def getPeptidesPositions (dataFrame):
     return dataFrame[[HEADER_PROTEIN, HEADER_P1]]
 
 # Generate the download index from a list of desired proteins
-def generateDownloadIndex (proteinList):
-    arq = open(INPUT_FILES_FOLDER + DOWNLOAD_INDEX, "w")
+def generateDownloadIndex (proteinList, downloadIndexFile):
+    arq = open(downloadIndexFile, "w")
     arq.write("\n".join(proteinList))
     arq.close()
 
 # Download protein files to working folder
-def downloadFilesFromIndex():
-    bulkDownload.main(INPUT_FILES_FOLDER + DOWNLOAD_INDEX)
+def downloadFilesFromIndex(downloadIndexFile):
+    bulkDownload.main(downloadIndexFile)
 
 # Path to protein file
 def getProteinFileName(protein):
@@ -84,14 +82,20 @@ def writeResults (sheetName, dataFrame):
     dataFrame.to_excel(sheetName)
 
 
+##### TO-DO: Add verbose [Info] during main code execution
+
 def main (sheetName):
     # Load input file
     cancerCellData = getSheet(sheetName)
 
-    # Generate proteins files index and download files
+    # Generate proteins files index
     proteinsList = getProteinsFromSheet(cancerCellData)
+    downloadIndexFile = INPUT_FILES_FOLDER + DOWNLOAD_INDEX
+    generateDownloadIndex(proteinsList, downloadIndexFile)
 
-    generateDownloadIndex(proteinsList)
+    # Download proteins files
+    downloadFilesFromIndex(downloadIndexFile)
+
 
     # Generate peptide positions
     peptidePositions = getPeptidesPositions(cancerCellData)
@@ -112,6 +116,11 @@ def main (sheetName):
     cancerCellData["Peptide Classification"] = peptideClassification
 
     writeResults(OUTPUT_FILES_FOLDER + RESULT_FILENAME_PREFIX + sheetName[sheetName.rfind("/")+1:], cancerCellData)
+
+    ##### TO-DO: Adapt the code below to process in parallel the code above, displaying a progress bar
+    ## with multiprocessing.Pool(N_CPUS) as processPool:
+    ##         result = list(tqdm.tqdm(processPool.imap(download, fileList), total=len(fileList)))
+    #####
 
 if __name__ == "__main__":
     if len(os.sys.argv) != 2:
