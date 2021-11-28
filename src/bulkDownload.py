@@ -57,10 +57,10 @@ def main(inputFileName):
                             FILE_EXTENSION) for inputValue in inputValues.split("\n")]
 
     # Create multiprocessing work pool
-    N_CPUS = min(multiprocessing.cpu_count(), MAXIMUM_THREADS)
+    N_CPUS = min(multiprocessing.cpu_count(), MAXIMUM_THREADS) * 8 # Multiply by 8 is a test
 
     if VERBOSE:
-        print("[Info] System has {} CPUs. Using {} CPUs for parallel work.".format(multiprocessing.cpu_count(), N_CPUS))
+        print("[Info] System has {} CPUs. Using {} threads for parallel work.".format(multiprocessing.cpu_count(), N_CPUS))
 
     if VERBOSE:
         print("[Info] Initializing bulk file download. Total of {} files in queue. This may take a while.".format(len(fileList)))
