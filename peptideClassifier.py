@@ -1,32 +1,13 @@
+# Import libraries
 import os
 import pandas as pd
-import requests
-from time import time
-from multiprocessing.pool import ThreadPool
-from clint.textui import progress
 
-url = 'http://do1.dr-chuck.com/pythonlearn/EN_us/pythonlearn.pdf'
-
-r = requests.get(url, stream=True)
-
-with open("LearnPython.pdf", "wb") as Pypdf:
-
-    total_length = int(r.headers.get('content-length'))
-
-    for ch in progress.bar(r.iter_content(chunk_size = 2391975), expected_size=(total_length/1024) + 1):
-
-        if ch:
-
-            Pypdf.write(ch)
-
-
-
-
-
-# If enabled, prints debug messages to console;
-DEBUG = False
+# Import project files
+import bulkDownload
+from config import *
 
 #  Recebe o nome de arquivo e retorna uma lista de linhas com intervalos de classes
+
 def filterFile(fileName):
     # if not fileExists("./temp/{}".format(fileName)):
     #     print("File {} doesn't exist, downloading...".format(fileName))
@@ -34,7 +15,7 @@ def filterFile(fileName):
     #       fileName,
     #      fileName))
 
-    arq = open("./temp/{}".format(fileName), "r")
+    arq = open("{}{}".format(TEMP_FILES_FOLDER, fileName), "r")
     contents = arq.read()
     arq.close()
 
@@ -84,8 +65,6 @@ def main (sheetName):
     #contents=df.iloc[:,3]
     #=df.iloc[:,4]
 
-
-
 if __name__ == "__main__":
     if len(os.sys.argv) != 2:
         print("[Error] Expecting 1 argument. Usage:\n\t$ python peptideClassifier.py <sheetName.xlsx>")
@@ -93,27 +72,24 @@ if __name__ == "__main__":
     sheetName = os.sys.argv[1]
     main(sheetName)
 
+
+    planilha = open(nomePlanilha, "r")
+    conteudo = planilha.readlines()
+    planilha.close()
     
 
+    u = UniProt()
+    r=Rhea()
 
+    getPeptide()
+    testing_HTML()
 
-    # planilha = open(nomePlanilha, "r")
-    # conteudo = planilha.readlines()
-    # planilha.close()
-    
+    interval = filterFile("P09681.txt")
 
-    #u = UniProt()
-    #r=Rhea()
+    print(intervalo)
 
-    #getPeptide()
-    #testing_HTML()
+    elementos = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
-    # interval = filterFile("P09681.txt")
-
-    # print(intervalo)
-
-    # elementos = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-
-    # for elemento in elementos:
-    #     print("Elemento: {} classificado como {}".format(elemento, classificador(elemento, intervalo)))
+    for elemento in elementos:
+        print("Elemento: {} classificado como {}".format(elemento, classificador(elemento, intervalo)))
 
