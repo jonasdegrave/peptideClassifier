@@ -1,27 +1,11 @@
 # Import libraries
+import os
 import tqdm
 import requests
-import os
 import multiprocessing
 
-# Configuration parameters
-DEBUG = True
-VERBOSE = True
-
-TEMP_FILES_FOLDER = "./temp/"
-INPUT_FILES_FOLDER = "./inputFiles/"
-OUTPUT_FILES_FOLDER = "./outputFiles/"
-
-INPUT_FILE = "proteinList.txt"
-
-SOURCE_URL = "https://www.uniprot.org/uniprot/"
-
-FILE_EXTENSION = ".txt"
-
-MAXIMUM_THREADS = 32
-
-DOWNLOAD_AGAIN = False
-
+# Import project files
+from config import *
 
 # Verifies if a file exists;
 def fileExists(fileName):
@@ -54,7 +38,7 @@ def download(url):
     except Exception as e:
         print("[Error] {}".format(e))
 
-def main():
+def main(inputFileName):
     if VERBOSE:
         print()
 
@@ -64,28 +48,28 @@ def main():
     createFolder(OUTPUT_FILES_FOLDER)
 
     # Parse input files
-    proteinsFile = open(INPUT_FILES_FOLDER + INPUT_FILE, "r")
-    proteins = proteinsFile.read()
-    proteinsFile.close()
+    inputFile = open(inputFileName, "r")
+    inputValues = inputFile.read()
+    inputFile.close()
 
     fileList = ["{}{}{}".format(SOURCE_URL,
-                            protein,
-                            FILE_EXTENSION) for protein in proteins.split("\n")]
+                            inputValue,
+                            FILE_EXTENSION) for inputValue in inputValues.split("\n")]
 
     # Create multiprocessing work pool
     N_CPUS = min(multiprocessing.cpu_count(), MAXIMUM_THREADS)
 
     if VERBOSE:
-        print("[Info] System has {} CPUs, using {} CPUs for parallel work.".format(multiprocessing.cpu_count(), N_CPUS))
+        print("[Info] System has {} CPUs. Using {} CPUs for parallel work.".format(multiprocessing.cpu_count(), N_CPUS))
 
     if VERBOSE:
-        print("[Info] Initiating file download. This may take a while.")
+        print("[Info] Initializing bulk file download. Total of {} files in queue. This may take a while.".format(len(fileList)))
 
     with multiprocessing.Pool(N_CPUS) as processPool:
             result = list(tqdm.tqdm(processPool.imap(download, fileList), total=len(fileList)))
 
     if VERBOSE:
-        print("[Info] File downloading complete!")
+        print("[Info] File downloading is complete!")
 
 if __name__ == "__main__":
-    main()
+    main(INPUT_FILES_FOLDER + INPUT_FILE)

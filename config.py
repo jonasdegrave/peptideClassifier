@@ -20,7 +20,6 @@ SOURCE_URL = "https://www.uniprot.org/uniprot/"
 # File extension for protein files
 FILE_EXTENSION = ".txt"
 
-
 # Maximum CPU threads to use in parallel downloading
 MAXIMUM_THREADS = 32
 
