@@ -7,9 +7,9 @@ DEBUG = True
 VERBOSE = True
 
 # Path to working folders
-TEMP_FILES_FOLDER = "./temp/"
-INPUT_FILES_FOLDER = "./inputFiles/"
-OUTPUT_FILES_FOLDER = "./outputFiles/"
+TEMP_FILES_FOLDER = "../temp/"
+INPUT_FILES_FOLDER = "../inputFiles/"
+OUTPUT_FILES_FOLDER = "../outputFiles/"
 
 # TO-DO: REMOVE THIS
 INPUT_FILE = "proteinList.txt"
