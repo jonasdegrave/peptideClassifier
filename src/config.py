@@ -1,3 +1,5 @@
+import os
+
 ################################
 ### CONFIGURATION PARAMETERS ###
 ################################
@@ -7,9 +9,11 @@ DEBUG = True
 VERBOSE = True
 
 # Path to working folders
-TEMP_FILES_FOLDER = "../temp/"
-INPUT_FILES_FOLDER = "../inputFiles/"
-OUTPUT_FILES_FOLDER = "../outputFiles/"
+RELATIVE_PATH = ".." if ("/src" in os.getcwd()) else "."
+
+TEMP_FILES_FOLDER = RELATIVE_PATH + "/temp/"
+INPUT_FILES_FOLDER = RELATIVE_PATH + "/inputFiles/"
+OUTPUT_FILES_FOLDER = RELATIVE_PATH + "/outputFiles/"
 
 # Prefix for result filename
 RESULT_FILENAME_PREFIX = "result_"
