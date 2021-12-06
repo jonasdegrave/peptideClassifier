@@ -32,6 +32,7 @@ DOWNLOAD_AGAIN = False
 # Protein name and peptide position column headers
 HEADER_PROTEIN = "protein"
 HEADER_P1 = "P1' position"
+HEADER_LEN_PEP="Length Pep"
 
 # Protein keys to look for
 PEPTIDE_HEADER = "FT"
